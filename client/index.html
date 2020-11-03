@@ -1,0 +1,62 @@
+<head>
+    <title>Pixel Anarchy</title>
+</head>
+
+<style>
+    canvas {
+        padding: 0;
+        margin: auto;
+        display: block;
+        width: 500px;
+        height: 500px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+</style>
+
+<canvas id="ctx" width="500" height="500" style="border:1px solid #404040;"></canvas>
+
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script>
+    var ctx = document.getElementById("ctx").getContext("2d");
+    ctx.font = "30px Arial";
+
+    var socket = io();
+
+    socket.on("newPosition", function(data) {
+        ctx.clearRect(0,0,500,500);
+
+        for(var i=0; i<data.length; i++) {
+            ctx.beginPath();
+            ctx.lineWidth = "10";
+            ctx.strokeStyle = "blue";
+            ctx.rect(data[i].x, data[i].y, 10, 10);
+            ctx.stroke();
+        }
+    });
+
+    document.onkeydown = function(event) {
+        if (event.keyCode === 68) // D
+            socket.emit("keyPress", {inputId: "right", state: true});
+        if (event.keyCode === 83) // S
+            socket.emit("keyPress", {inputId: "down", state: true});
+        if (event.keyCode === 65) // A
+            socket.emit("keyPress", {inputId: "left", state: true});
+        if (event.keyCode === 87) // W
+            socket.emit("keyPress", {inputId: "up", state: true});
+    }
+
+    document.onkeyup = function(event) {
+        if (event.keyCode === 68) // D
+            socket.emit("keyPress", {inputId: "right", state: false});
+        if (event.keyCode === 83) // S
+            socket.emit("keyPress", {inputId: "down", state: false});
+        if (event.keyCode === 65) // A
+            socket.emit("keyPress", {inputId: "left", state: false});
+        if (event.keyCode === 87) // W
+            socket.emit("keyPress", {inputId: "up", state: false});
+    }
+</script>
