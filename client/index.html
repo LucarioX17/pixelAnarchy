@@ -17,10 +17,15 @@
     }
 </style>
 
-<canvas id="ctx" width="500" height="500" style="border:1px solid #404040;"></canvas>
+<canvas id="ctx" width="500" height="500" style="border:1px solid #262626;"></canvas>
 
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script>
+    console.log("%cPixel Anarchy v0.0.2", "background:black; color:white;");
+
+    var playerX = 240,
+        playerY = 240;
+
     var ctx = document.getElementById("ctx").getContext("2d");
     ctx.font = "30px Arial";
 
@@ -30,11 +35,13 @@
         ctx.clearRect(0,0,500,500);
 
         for(var i=0; i<data.length; i++) {
-            ctx.beginPath();
             ctx.lineWidth = "10";
-            ctx.strokeStyle = "blue";
-            ctx.rect(data[i].x, data[i].y, 10, 10);
+            ctx.fillStyle = data[i].color;
+            ctx.fillRect(playerX, playerY, 20, 20);
             ctx.stroke();
+
+            playerX = data[i].x;
+            playerY = data[i].y;
         }
     });
 
@@ -58,5 +65,13 @@
             socket.emit("keyPress", {inputId: "left", state: false});
         if (event.keyCode === 87) // W
             socket.emit("keyPress", {inputId: "up", state: false});
+    }
+
+    function addWall(x, y, w, h) {
+        ctx.beginPath();
+        ctx.lineWidth = "10";
+        ctx.strokeStyle = "#262626";
+        ctx.rect(x, y, w, h);
+        ctx.stroke();
     }
 </script>

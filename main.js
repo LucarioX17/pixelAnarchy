@@ -10,20 +10,24 @@ server.listen(process.env.PORT || 2000);
 console.log("Server started");
 console.log("");
 
-var socketList = {};
-var playerList = {};
+var socketList = {},
+playerList = {},
+colorList = ["#ff6666", "#ffb366", "#ffff66", "#b3ff66", "#66ff66", "#66ffb3", "#66ffff", "#66b3ff", "#6666ff",
+            "#b366ff", "#ff66ff"],
+playerColor = Math.floor(Math.random()*10);
 
 var Player = function(id) {
     var self = {
-        x: 250,
-        y: 250,
+        x: 240,
+        y: 240,
         id: id,
         number: 0,
         right: false,
         left: false,
         up: false,
         down: false,
-        speed: 5
+        speed: 3,
+        color: colorList[playerColor]
     }
     self.updatePosition = function() {
         if (self.right) self.x += self.speed;
@@ -35,7 +39,7 @@ var Player = function(id) {
 }
 
 var io = require("socket.io") (server, {});
-io.sockets.on("connection", function(socket){
+io.sockets.on("connection", function(socket) {
     socket.id = Math.random() * (1000 - 1) + 1;
     socketList[socket.id] = socket;
 
@@ -70,12 +74,13 @@ setInterval(function() {
     for(var i in playerList) {
         var player = playerList[i];
         player.updatePosition();
-        player.number = pack.length + 1;
+        player.number = pack.length;
 
         pack.push({
             x: player.x,
             y: player.y,
-            number: player.number
+            id: player.id,
+            color: player.color
         });
     }
 
@@ -83,6 +88,6 @@ setInterval(function() {
         var socket = socketList[i];
         socket.emit("newPosition", pack);
     }
-}, 1000/30);
+}, 1000/60);
 
 // < >
