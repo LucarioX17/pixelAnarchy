@@ -21,13 +21,12 @@
 
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script>
-    console.log("%cPixel Anarchy v0.0.2", "background:black; color:white;");
+    console.log("%cPixel Anarchy v0.0.3", "background:black; color:white;");
 
-    var playerX = 240,
-        playerY = 240;
+    var playerX = 0,
+        playerY = 0;
 
     var ctx = document.getElementById("ctx").getContext("2d");
-    ctx.font = "30px Arial";
 
     var socket = io();
 
@@ -35,13 +34,24 @@
         ctx.clearRect(0,0,500,500);
 
         for(var i=0; i<data.length; i++) {
-            ctx.lineWidth = "10";
-            ctx.fillStyle = data[i].color;
-            ctx.fillRect(playerX, playerY, 20, 20);
-            ctx.stroke();
-
             playerX = data[i].x;
             playerY = data[i].y;
+
+            if (playerX == 0) {
+                socket.emit("keyPress", {inputId: "cantLeft", state: true, playerId: data[i].id});
+            } else socket.emit("keyPress", {inputId: "cantLeft", state: false, playerId: data[i].id});
+            if (playerX == 480) {
+                socket.emit("keyPress", {inputId: "cantRight", state: true, playerId: data[i].id});
+            } else socket.emit("keyPress", {inputId: "cantRight", state: false, playerId: data[i].id});
+            if (playerY == 0) {
+                socket.emit("keyPress", {inputId: "cantUp", state: true, playerId: data[i].id});
+            } else socket.emit("keyPress", {inputId: "cantUp", state: false, playerId: data[i].id});
+            if (playerY == 480) {
+                socket.emit("keyPress", {inputId: "cantDown", state: true, playerId: data[i].id});
+            } else socket.emit("keyPress", {inputId: "cantDown", state: false, playerId: data[i].id});
+
+            ctx.fillStyle = data[i].color;
+            ctx.fillRect(playerX, playerY, 20, 20);
         }
     });
 
@@ -68,10 +78,7 @@
     }
 
     function addWall(x, y, w, h) {
-        ctx.beginPath();
-        ctx.lineWidth = "10";
-        ctx.strokeStyle = "#262626";
-        ctx.rect(x, y, w, h);
-        ctx.stroke();
+        ctx.fillStyle = "#262626";
+        ctx.fillRect(x, y, w, h);
     }
 </script>

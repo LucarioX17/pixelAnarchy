@@ -12,9 +12,7 @@ console.log("");
 
 var socketList = {},
 playerList = {},
-colorList = ["#ff6666", "#ffb366", "#ffff66", "#b3ff66", "#66ff66", "#66ffb3", "#66ffff", "#66b3ff", "#6666ff",
-            "#b366ff", "#ff66ff"],
-playerColor = Math.floor(Math.random()*10);
+colorList = ["#ff4d4d", "#ffa64d", "#ffff4d", "#79ff4d", "#4dffff", "#4d79ff", "#a64dff", "#ff4dd2"];
 
 var Player = function(id) {
     var self = {
@@ -26,14 +24,18 @@ var Player = function(id) {
         left: false,
         up: false,
         down: false,
+        cantRight: false,
+        cantLeft: false,
+        cantUp: false,
+        cantDown: false,
         speed: 3,
-        color: colorList[playerColor]
+        color: colorList[Math.floor(Math.random()*7)]
     }
     self.updatePosition = function() {
-        if (self.right) self.x += self.speed;
-        if (self.left) self.x -= self.speed;
-        if (self.up) self.y -= self.speed;
-        if (self.down) self.y += self.speed;
+        if (self.right && !self.cantRight) self.x += self.speed;
+        if (self.left && !self.cantLeft) self.x -= self.speed;
+        if (self.up && !self.cantUp) self.y -= self.speed;
+        if (self.down && !self.cantDown) self.y += self.speed;
     }
     return self;
 }
@@ -66,6 +68,14 @@ io.sockets.on("connection", function(socket) {
             player.up = data.state;
         if (data.inputId === "down")
             player.down = data.state;
+        if (data.inputId === "cantRight")
+            playerList[data.playerId].cantRight = data.state;
+        if (data.inputId === "cantLeft")
+            playerList[data.playerId].cantLeft = data.state;
+        if (data.inputId === "cantUp")
+            playerList[data.playerId].cantUp = data.state;
+        if (data.inputId === "cantDown")
+            playerList[data.playerId].cantDown = data.state;
     });
 });
 
