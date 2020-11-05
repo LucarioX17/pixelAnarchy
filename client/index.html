@@ -39,7 +39,11 @@
 
             if (playerX <= 0) {
                 socket.emit("keyPress", {inputId: "cantLeft", state: true, playerId: data[i].id});
-            } else socket.emit("keyPress", {inputId: "cantLeft", state: false, playerId: data[i].id});
+                socket.emit("keyPress", {PlayerX: 0, playerId: data[i].id});
+            } else {
+                socket.emit("keyPress", {inputId: "cantLeft", state: false, playerId: data[i].id});
+                socket.emit("keyPress", {PlayerX: playerX, playerId: data[i].id});
+            }
             if (playerX >= 480) {
                 socket.emit("keyPress", {inputId: "cantRight", state: true, playerId: data[i].id});
             } else socket.emit("keyPress", {inputId: "cantRight", state: false, playerId: data[i].id});

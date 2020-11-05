@@ -73,6 +73,7 @@ io.sockets.on("connection", function(socket) {
             playerList[data.playerId].cantRight = data.state;
         if (data.inputId === "cantLeft")
             playerList[data.playerId].cantLeft = data.state;
+            if (data.PlayerX == 0) playerList[data.playerId].x = data.PlayerX;
         if (data.inputId === "cantUp")
             playerList[data.playerId].cantUp = data.state;
         if (data.inputId === "cantDown")
