@@ -37,22 +37,11 @@
 
             console.log(playerX);
 
-            if (playerX <= 0) {
-                socket.emit("keyPress", {inputId: "cantLeft", state: true, playerId: data[i].id});
-                socket.emit("keyPress", {PlayerX: 0, playerId: data[i].id});
-            } else {
-                socket.emit("keyPress", {inputId: "cantLeft", state: false, playerId: data[i].id});
-                socket.emit("keyPress", {PlayerX: playerX, playerId: data[i].id});
-            }
-            if (playerX >= 480) {
-                socket.emit("keyPress", {inputId: "cantRight", state: true, playerId: data[i].id});
-            } else socket.emit("keyPress", {inputId: "cantRight", state: false, playerId: data[i].id});
-            if (playerY <= 0) {
-                socket.emit("keyPress", {inputId: "cantUp", state: true, playerId: data[i].id});
-            } else socket.emit("keyPress", {inputId: "cantUp", state: false, playerId: data[i].id});
-            if (playerY >= 480) {
-                socket.emit("keyPress", {inputId: "cantDown", state: true, playerId: data[i].id});
-            } else socket.emit("keyPress", {inputId: "cantDown", state: false, playerId: data[i].id});
+            if (playerX < -10) socket.emit("keyPress", {change: true, PlayerY: playerY, PlayerX: 510, playerId: data[i].id});
+            else if (playerX > 510) socket.emit("keyPress", {change: true, PlayerY: playerY, PlayerX: -10, playerId: data[i].id});
+            else if (playerY < -10) socket.emit("keyPress", {change: true, PlayerX: playerX, PlayerY: 510, playerId: data[i].id});
+            else if (playerY > 510) socket.emit("keyPress", {change: true, PlayerX: playerX, PlayerY: -10, playerId: data[i].id});
+            else socket.emit("keyPress", {change: false, playerId: data[i].id});
 
             ctx.fillStyle = data[i].color;
             ctx.fillRect(playerX, playerY, 20, 20);
