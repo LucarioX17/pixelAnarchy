@@ -33,7 +33,7 @@ var Player = function(id) {
         color: colorList[Math.floor(Math.random()*7)]
     }
     self.updatePosition = function() {
-        if (self.right && !self.cantRight) self.x += self.speed;
+        if (self.right && !self.cantRight) {self.x += self.speed; console.log("hit");}
         if (self.left && !self.cantLeft) self.x -= self.speed;
         if (self.up && !self.cantUp) self.y -= self.speed;
         if (self.down && !self.cantDown) self.y += self.speed;
@@ -71,10 +71,8 @@ io.sockets.on("connection", function(socket) {
             player.down = data.state;
         if (data.inputId === "cantRight")
             playerList[data.playerId].cantRight = data.state;
-        if (data.inputId === "cantLeft") {
+        if (data.inputId === "cantLeft")
             playerList[data.playerId].cantLeft = data.state;
-            console.log(playerList[data.playerId]);
-        }
         if (data.inputId === "cantUp")
             playerList[data.playerId].cantUp = data.state;
         if (data.inputId === "cantDown")
