@@ -7,6 +7,7 @@ game.get("/", function(req, res) {
 });
 game.use("/client", express.static(__dirname + "/client"));
 server.listen(process.env.PORT || 2000);
+console.log("");
 console.log("Server started");
 console.log("");
 
@@ -48,15 +49,15 @@ io.sockets.on("connection", function(socket) {
     var player = Player(socket.id);
     playerList[socket.id] = player;
 
-    console.log("\x1b[0m\x1b[32m", "Player " + socket.id + " connected");
-    console.log("\x1b[0m", "");
+    console.log("Player " + socket.id + " connected");
+    console.log("");
 
     socket.on("disconnect", function(data) {
         delete socketList[socket.id];
         delete playerList[socket.id];
 
-        console.log("\x1b[0m\x1b[31m", "Player " + socket.id + " disconnected");
-        console.log("\x1b[0m", "");
+        console.log("Player " + socket.id + " disconnected");
+        console.log("");
     });
 
     socket.on("keyPress", function(data) {
@@ -70,8 +71,10 @@ io.sockets.on("connection", function(socket) {
             player.down = data.state;
         if (data.inputId === "cantRight")
             playerList[data.playerId].cantRight = data.state;
-        if (data.inputId === "cantLeft")
+        if (data.inputId === "cantLeft") {
             playerList[data.playerId].cantLeft = data.state;
+            console.log(playerList[data.playerId]);
+        }
         if (data.inputId === "cantUp")
             playerList[data.playerId].cantUp = data.state;
         if (data.inputId === "cantDown")

@@ -39,6 +39,7 @@
 
             if (playerX == 0) {
                 socket.emit("keyPress", {inputId: "cantLeft", state: true, playerId: data[i].id});
+                console.log("hit");
             } else socket.emit("keyPress", {inputId: "cantLeft", state: false, playerId: data[i].id});
             if (playerX == 480) {
                 socket.emit("keyPress", {inputId: "cantRight", state: true, playerId: data[i].id});
