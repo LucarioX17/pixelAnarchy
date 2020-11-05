@@ -35,9 +35,9 @@
             playerX = data[i].x;
             playerY = data[i].y;
 
-            if (playerX < -20) socket.emit("keyPress", {change: true, PlayerY: playerY, PlayerX: 510, playerId: data[i].id});
+            if (playerX < -21) socket.emit("keyPress", {change: true, PlayerY: playerY, PlayerX: 510, playerId: data[i].id});
             else if (playerX > 510) socket.emit("keyPress", {change: true, PlayerY: playerY, PlayerX: -20, playerId: data[i].id});
-            else if (playerY < -20) socket.emit("keyPress", {change: true, PlayerX: playerX, PlayerY: 510, playerId: data[i].id});
+            else if (playerY < -21) socket.emit("keyPress", {change: true, PlayerX: playerX, PlayerY: 510, playerId: data[i].id});
             else if (playerY > 510) socket.emit("keyPress", {change: true, PlayerX: playerX, PlayerY: -20, playerId: data[i].id});
             else socket.emit("keyPress", {change: false, playerId: data[i].id});
 
