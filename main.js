@@ -13,11 +13,11 @@ console.log("");
 
 var socketList = {},
 playerList = {},
-colorList = ["#ff4d4d", "#ffa64d", "#ffff4d", "#79ff4d", "#4dffff", "#4d79ff", "#a64dff", "#ff4dd2"];
+colorList = ["#0066ff", "#ff0000"];
 
 var Player = function(id) {
     var self = {
-        x: 240,
+        x: 120,
         y: 240,
         id: id,
         number: 0,
@@ -27,7 +27,8 @@ var Player = function(id) {
         down: false,
         canCollideX: false,
         speed: 3,
-        color: colorList[Math.floor(Math.random()*7)]
+        color: colorList[Math.floor(Math.random()*2)],
+        started: false
     }
     self.updatePosition = function() {
         if (self.right) self.x += self.speed;
@@ -75,8 +76,8 @@ io.sockets.on("connection", function(socket) {
         }
     });
 
-    socket.on("canCollideX", function(data) {
-        if (data.playerId != "undefined" && data.canCollideX != "undefined") playerList[data.playerId].canCollideX = data.canCollideX;
+    socket.on("started", function(data) {
+        playerList[data.playerId].started = data.started;
     });
 });
 
@@ -85,14 +86,24 @@ setInterval(function() {
     for(var i in playerList) {
         var player = playerList[i];
         player.updatePosition();
-        player.number = pack.length;
 
+        if (!player.started) {
+            if (pack.length % 2 == 0) {
+                player.color = colorList[0];
+                player.x = 120;
+            } else {
+                player.color = colorList[1];
+                player.x = 360;
+            }
+        }
+        
         pack.push({
             x: player.x,
             y: player.y,
             id: player.id,
             canCollideX: player.canCollideX,
-            color: player.color
+            color: player.color,
+            started: player.started
         });
     }
 
