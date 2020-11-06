@@ -75,6 +75,10 @@ io.sockets.on("connection", function(socket) {
         }
     });
 
+    socket.on("canCollideX", function(data) {
+        if (data.playerId != "undefined" && data.canCollideX != "undefined") playerList[data.playerId].canCollideX = data.canCollideX;
+    });
+
     socket.on("started", function(data) {
         playerList[data.playerId].started = data.started;
     });
@@ -100,6 +104,7 @@ setInterval(function() {
             x: player.x,
             y: player.y,
             id: player.id,
+            canCollideX: player.canCollideX,
             color: player.color,
             started: player.started
         });
@@ -110,5 +115,3 @@ setInterval(function() {
         socket.emit("newPosition", pack);
     }
 }, 1000/60);
-
-// < >
