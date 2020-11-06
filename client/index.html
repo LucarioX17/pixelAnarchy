@@ -43,33 +43,33 @@
             collided = false;
 
             if (playerX < 0) {
-                socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 1, playerId: data[i].id});
-                playerX = 1;
+                socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 10, playerId: data[i].id});
+                playerX = 10;
                 collided = true;
             } 
             if (playerX > 480) {
-                socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 479, playerId: data[i].id});
-                playerX = 479;
+                socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 470, playerId: data[i].id});
+                playerX = 470;
                 collided = true;
             } 
             if (playerY < 0) {
-                socket.emit("collision", {change: true, PlayerX: playerX, PlayerY: 1, playerId: data[i].id});
-                playerY = 1;
+                socket.emit("collision", {change: true, PlayerX: playerX, PlayerY: 10, playerId: data[i].id});
+                playerY = 10;
                 collided = true;
             } 
             if (playerY > 480) {
-                socket.emit("collision", {change: true, PlayerX: playerX, PlayerY: 479, playerId: data[i].id});
-                playerY = 479;
+                socket.emit("collision", {change: true, PlayerX: playerX, PlayerY: 470, playerId: data[i].id});
+                playerY = 470;
                 collided = true;
             }
 
             if (playerX > 219 && data[i].color == "#0066ff") { // Blue
-                socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 218, playerId: data[i].id});
-                playerX = 218;
+                socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 209, playerId: data[i].id});
+                playerX = 209;
                 collided = true;
             } else if (playerX < 241 && data[i].color == "#ff0000") { // Red
-                socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 242, playerId: data[i].id});
-                playerX = 242;
+                socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 251, playerId: data[i].id});
+                playerX = 251;
                 collided = true;
             }
 
