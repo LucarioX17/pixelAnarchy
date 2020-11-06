@@ -44,31 +44,37 @@
 
             if (playerX < 0) {
                 socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 0, playerId: data[i].id});
+                socket.emit("keyPress", {inputId: "left", state: false});
                 playerX = 0;
                 collided = true;
             } 
             if (playerX > 480) {
                 socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 480, playerId: data[i].id});
+                socket.emit("keyPress", {inputId: "right", state: false});
                 playerX = 480;
                 collided = true;
             } 
             if (playerY < 0) {
                 socket.emit("collision", {change: true, PlayerX: playerX, PlayerY: 0, playerId: data[i].id});
+                socket.emit("keyPress", {inputId: "up", state: false});
                 playerY = 0;
                 collided = true;
-            } 
+            }
             if (playerY > 480) {
                 socket.emit("collision", {change: true, PlayerX: playerX, PlayerY: 480, playerId: data[i].id});
+                socket.emit("keyPress", {inputId: "down", state: false});
                 playerY = 480;
                 collided = true;
             }
 
             if (playerX > 219 && data[i].color == "#0066ff") { // Blue
                 socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 219, playerId: data[i].id});
+                socket.emit("keyPress", {inputId: "right", state: false});
                 playerX = 219;
                 collided = true;
             } else if (playerX < 241 && data[i].color == "#ff0000") { // Red
                 socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 241, playerId: data[i].id});
+                socket.emit("keyPress", {inputId: "left", state: false});
                 playerX = 241;
                 collided = true;
             }
