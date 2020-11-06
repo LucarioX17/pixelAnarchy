@@ -22,7 +22,11 @@
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script>
     var playerX = 0,
-        playerY = 0;
+        playerY = 0,
+        wallArrayX = [],
+        wallArrayY = [],
+        collided = false,
+        wallSize = 20;
 
     var ctx = document.getElementById("ctx").getContext("2d");
 
@@ -30,19 +34,83 @@
 
     socket.on("newPosition", function(data) {
         ctx.clearRect(0,0,500,500);
-
+        
+        for (var yy=0; yy<500; yy+=80) {
+            for (var xx=0; xx<500; xx+=80) {
+                if (xx == 240 && yy == 240) {} else {
+                    addWall(xx, yy, wallSize, wallSize);
+                    wallArrayX.push(xx);
+                    wallArrayY.push(yy);
+                }
+            }
+        }
+        
         for(var i=0; i<data.length; i++) {
             playerX = data[i].x;
             playerY = data[i].y;
 
-            if (playerX < -25) socket.emit("keyPress", {change: true, PlayerY: playerY, PlayerX: 510, playerId: data[i].id});
-            else if (playerX > 510) socket.emit("keyPress", {change: true, PlayerY: playerY, PlayerX: -25, playerId: data[i].id});
-            else if (playerY < -25) socket.emit("keyPress", {change: true, PlayerX: playerX, PlayerY: 510, playerId: data[i].id});
-            else if (playerY > 510) socket.emit("keyPress", {change: true, PlayerX: playerX, PlayerY: -25, playerId: data[i].id});
-            else socket.emit("keyPress", {change: false, playerId: data[i].id});
+            if (playerX < 0) {
+                socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 0, playerId: data[i].id});
+                playerX = 0;
+                collided = true;
+            } else if (playerX > 480) {
+                socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: 480, playerId: data[i].id});
+                playerX = 480;
+                collided = true;
+            } else if (playerY < 0) {
+                socket.emit("collision", {change: true, PlayerX: playerX, PlayerY: 0, playerId: data[i].id});
+                playerY = 0;
+                collided = true;
+            } else if (playerY > 480) {
+                socket.emit("collision", {change: true, PlayerX: playerX, PlayerY: 480, playerId: data[i].id});
+                playerY = 480;
+                collided = true;
+            }
+
+            for (var w in wallArrayX) {
+                if (playerY >= wallArrayY[w]-wallSize && playerY <= wallArrayY[w]+wallSize && data[i].canCollideX) {
+                    if (playerX > wallArrayX[w]-wallSize && playerX < wallArrayX[w]-10) {
+                        socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: wallArrayX[w]-wallSize, playerId: data[i].id});
+                        playerX = wallArrayX[w]-wallSize;
+                        collided = true;
+                    } else if (playerX < wallArrayX[w]+wallSize && playerX > wallArrayX[w]-10) {
+                        socket.emit("collision", {change: true, PlayerY: playerY, PlayerX: wallArrayX[w]+wallSize, playerId: data[i].id});
+                        playerX = wallArrayX[w]+wallSize;
+                        collided = true;
+                    } else collided = false;
+                }
+                if (playerX >= wallArrayX[w]-wallSize && playerX <= wallArrayX[w]+wallSize && !data[i].canCollideX) {
+                    if (playerY > wallArrayY[w]-wallSize && playerY < wallArrayY[w]-10) {
+                        socket.emit("collision", {change: true, PlayerX: playerX, PlayerY: wallArrayY[w]-wallSize, playerId: data[i].id});
+                        playerY = wallArrayY[w]-wallSize;
+                        collided = true;
+                    } else if (playerY < wallArrayY[w]+wallSize && playerY > wallArrayY[w]-10) {
+                        socket.emit("collision", {change: true, PlayerX: playerX, PlayerY: wallArrayY[w]+wallSize, playerId: data[i].id});
+                        playerY = wallArrayY[w]+wallSize;
+                        collided = true;
+                    } else collided = false;
+                }
+                
+                if (Math.abs((playerX-10) - (wallArrayX[w]-wallSize/2)) <= 23 && Math.abs((playerY-10) - (wallArrayY[w]-wallSize/2)) <= 23) {
+                    if (Math.abs((playerX-10) - (wallArrayX[w]-wallSize/2)) > Math.abs((playerY-10) - (wallArrayY[w]-wallSize/2))) {
+                    socket.emit("canCollideX", {canCollideX: true, playerId: data[i].id});
+                    } else socket.emit("canCollideX", {canCollideX: false, playerId: data[i].id});
+                }
+            }
+
+            if (!collided) {
+                socket.emit("collision", {change: false, PlayerX: playerX, PlayerY: playerY, playerId: data[i].id});
+            }
 
             ctx.fillStyle = data[i].color;
             ctx.fillRect(playerX, playerY, 20, 20);
+        }
+
+        for (var yy=0; yy<500; yy+=80) {
+            for (var xx=0; xx<500; xx+=80) {
+                    wallArrayX.pop(xx);
+                    wallArrayY.pop(yy);
+            }
         }
     });
 

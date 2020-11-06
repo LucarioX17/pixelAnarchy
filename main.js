@@ -25,11 +25,12 @@ var Player = function(id) {
         left: false,
         up: false,
         down: false,
+        canCollideX: false,
         speed: 3,
         color: colorList[Math.floor(Math.random()*7)]
     }
     self.updatePosition = function() {
-        if (self.right) {self.x += self.speed;}
+        if (self.right) self.x += self.speed;
         if (self.left) self.x -= self.speed;
         if (self.up) self.y -= self.speed;
         if (self.down) self.y += self.speed;
@@ -65,11 +66,17 @@ io.sockets.on("connection", function(socket) {
             player.up = data.state;
         if (data.inputId === "down")
             player.down = data.state;
+    });
 
+    socket.on("collision", function(data) {
         if (data.change) {
             playerList[data.playerId].x = data.PlayerX;
             playerList[data.playerId].y = data.PlayerY;
         }
+    });
+
+    socket.on("canCollideX", function(data) {
+        if (data.playerId != "undefined") playerList[data.playerId].canCollideX = data.canCollideX;
     });
 });
 
@@ -84,6 +91,7 @@ setInterval(function() {
             x: player.x,
             y: player.y,
             id: player.id,
+            canCollideX: player.canCollideX,
             color: player.color
         });
     }
