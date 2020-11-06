@@ -26,7 +26,7 @@ var Player = function(id) {
         up: false,
         down: false,
         speed: 3,
-        color: colorList[Math.floor(Math.random()*2)],
+        color: colorList[0],
         started: false
     }
     self.updatePosition = function() {
@@ -104,7 +104,6 @@ setInterval(function() {
             x: player.x,
             y: player.y,
             id: player.id,
-            canCollideX: player.canCollideX,
             color: player.color,
             started: player.started
         });
