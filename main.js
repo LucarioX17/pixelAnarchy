@@ -25,7 +25,6 @@ var Player = function(id) {
         left: false,
         up: false,
         down: false,
-        canCollideX: false,
         speed: 3,
         color: colorList[Math.floor(Math.random()*2)],
         started: false
@@ -71,8 +70,8 @@ io.sockets.on("connection", function(socket) {
 
     socket.on("collision", function(data) {
         if (data.change) {
-            playerList[data.playerId].x = data.PlayerX;
-            playerList[data.playerId].y = data.PlayerY;
+            if (data.PlayerX != undefined) playerList[data.playerId].x = data.PlayerX;
+            if (data.PlayerY != undefined) playerList[data.playerId].y = data.PlayerY;
         }
     });
 
@@ -101,7 +100,6 @@ setInterval(function() {
             x: player.x,
             y: player.y,
             id: player.id,
-            canCollideX: player.canCollideX,
             color: player.color,
             started: player.started
         });
