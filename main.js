@@ -76,7 +76,7 @@ io.sockets.on("connection", function(socket) {
     });
 
     socket.on("canCollideX", function(data) {
-        if (data.playerId != "undefined") playerList[data.playerId].canCollideX = data.canCollideX;
+        if (data.playerId != "undefined" && data.canCollideX != "undefined") playerList[data.playerId].canCollideX = data.canCollideX;
     });
 });
 

@@ -35,8 +35,8 @@
     socket.on("newPosition", function(data) {
         ctx.clearRect(0,0,500,500);
         
-        for (var yy=0; yy<500; yy+=80) {
-            for (var xx=0; xx<500; xx+=80) {
+        for (var yy=80; yy<420; yy+=160) {
+            for (var xx=80; xx<420; xx+=160) {
                 if (xx == 240 && yy == 240) {} else {
                     addWall(xx, yy, wallSize, wallSize);
                     wallArrayX.push(xx);
@@ -106,10 +106,10 @@
             ctx.fillRect(playerX, playerY, 20, 20);
         }
 
-        for (var yy=0; yy<500; yy+=80) {
-            for (var xx=0; xx<500; xx+=80) {
-                    wallArrayX.pop(xx);
-                    wallArrayY.pop(yy);
+        for (var yy=80; yy<420; yy+=160) {
+            for (var xx=80; xx<420; xx+=160) {
+                wallArrayX.pop(xx);
+                wallArrayY.pop(yy);
             }
         }
     });
