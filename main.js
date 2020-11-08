@@ -25,6 +25,8 @@ var Player = function(id) {
         left: false,
         up: false,
         down: false,
+        canCollideX: false,
+        shoot: 0,
         speed: 3,
         color: colorList[0],
         started: false
@@ -48,6 +50,10 @@ io.sockets.on("connection", function(socket) {
 
     console.log("Player " + socket.id + " connected");
     console.log("");
+
+    socket.on("canCollideX", function(data) {
+        playerList[data.playerId].canCollideX = data.canCollideX;
+    });
 
     socket.on("disconnect", function(data) {
         delete socketList[socket.id];
@@ -75,12 +81,8 @@ io.sockets.on("connection", function(socket) {
         }
     });
 
-    socket.on("canCollideX", function(data) {
-        if (data.playerId != "undefined" && data.canCollideX != "undefined") playerList[data.playerId].canCollideX = data.canCollideX;
-    });
-
     socket.on("started", function(data) {
-        playerList[data.playerId].started = data.started;
+        player.started = data.started;
     });
 });
 
@@ -89,6 +91,7 @@ setInterval(function() {
     for(var i in playerList) {
         var player = playerList[i];
         player.updatePosition();
+        if (player.shoot > 0) player.shoot--;
 
         if (!player.started) {
             if (pack.length % 2 == 0) {
@@ -105,6 +108,7 @@ setInterval(function() {
             y: player.y,
             id: player.id,
             color: player.color,
+            canCollideX: player.canCollideX,
             started: player.started
         });
     }
