@@ -95,33 +95,32 @@
 
             for (var w in wallArrayX) {
                 if (playerY >= wallArrayY[w]-wallSize && playerY <= wallArrayY[w]+wallSize && data[i].canCollideX) {
-                    if (playerX > wallArrayX[w]-wallSize && playerX < wallArrayX[w]-10) {
+                    if (playerX > wallArrayX[w]-wallSize && playerX < wallArrayX[w]-10 && !collided) {
                         socket.emit("collision", {change: true, PlayerX: wallArrayX[w]-wallSize, playerId: data[i].id});
                         playerX = wallArrayX[w]-wallSize;
                         collided = true;
-                    } else if (playerX < wallArrayX[w]+wallSize && playerX > wallArrayX[w]-10) {
+                    } else if (playerX < wallArrayX[w]+wallSize && playerX > wallArrayX[w]-10 && !collided) {
                         socket.emit("collision", {change: true, PlayerX: wallArrayX[w]+wallSize, playerId: data[i].id});
                         playerX = wallArrayX[w]+wallSize;
                         collided = true;
                     } else collided = false;
                 }
                 if (playerX >= wallArrayX[w]-wallSize && playerX <= wallArrayX[w]+wallSize && !data[i].canCollideX) {
-                    if (playerY > wallArrayY[w]-wallSize && playerY < wallArrayY[w]-10) {
+                    if (playerY > wallArrayY[w]-wallSize && playerY < wallArrayY[w]-10 && !collided) {
                         socket.emit("collision", {change: true, PlayerY: wallArrayY[w]-wallSize, playerId: data[i].id});
                         playerY = wallArrayY[w]-wallSize;
                         collided = true;
-                    } else if (playerY < wallArrayY[w]+wallSize && playerY > wallArrayY[w]-10) {
+                    } else if (playerY < wallArrayY[w]+wallSize && playerY > wallArrayY[w]-10 && !collided) {
                         socket.emit("collision", {change: true, PlayerY: wallArrayY[w]+wallSize, playerId: data[i].id});
                         playerY = wallArrayY[w]+wallSize;
                         collided = true;
                     } else collided = false;
                 }
                 
-                if (Math.abs((playerX-10) - (wallArrayX[w]-wallSize/2)) <= 30 && Math.abs((playerY-10) - (wallArrayY[w]-wallSize/2)) <= 30) {
+                if (Math.abs((playerX-10) - (wallArrayX[w]-wallSize/2)) <= 23 && Math.abs((playerY-10) - (wallArrayY[w]-wallSize/2)) <= 23) {
                     if (Math.abs((playerX-10) - (wallArrayX[w]-wallSize/2)) > Math.abs((playerY-10) - (wallArrayY[w]-wallSize/2))) {
                         socket.emit("canCollideX", {canCollideX: true, playerId: data[i].id});
-                        console.log("collideX");
-                    } else {socket.emit("canCollideX", {canCollideX: false, playerId: data[i].id}); console.log("NOT collideX");}
+                    } else socket.emit("canCollideX", {canCollideX: false, playerId: data[i].id});
                 }
             }
 
