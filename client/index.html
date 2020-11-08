@@ -94,23 +94,23 @@
             }*/
 
             for (var w in wallArrayX) {
-                if (playerY >= wallArrayY[w]-wallSize && playerY <= wallArrayY[w]+wallSize && data[i].canCollideX && !collided) {
-                    if (playerX > wallArrayX[w]-wallSize && playerX < wallArrayX[w]-10) {
+                if (playerY >= wallArrayY[w]-wallSize && playerY <= wallArrayY[w]+wallSize && data[i].canCollideX) {
+                    if (playerX > wallArrayX[w]-wallSize && playerX < wallArrayX[w]-5) {
                         socket.emit("collision", {change: true, PlayerX: wallArrayX[w]-wallSize, playerId: data[i].id});
                         playerX = wallArrayX[w]-wallSize;
                         collided = true;
-                    } else if (playerX < wallArrayX[w]+wallSize && playerX > wallArrayX[w]-10) {
+                    } else if (playerX < wallArrayX[w]+wallSize && playerX > wallArrayX[w]-5) {
                         socket.emit("collision", {change: true, PlayerX: wallArrayX[w]+wallSize, playerId: data[i].id});
                         playerX = wallArrayX[w]+wallSize;
                         collided = true;
                     } else collided = false;
                 }
-                if (playerX >= wallArrayX[w]-wallSize && playerX <= wallArrayX[w]+wallSize && !data[i].canCollideX && !collided) {
-                    if (playerY > wallArrayY[w]-wallSize && playerY < wallArrayY[w]-10) {
+                if (playerX >= wallArrayX[w]-wallSize && playerX <= wallArrayX[w]+wallSize && !data[i].canCollideX) {
+                    if (playerY > wallArrayY[w]-wallSize && playerY < wallArrayY[w]-5) {
                         socket.emit("collision", {change: true, PlayerY: wallArrayY[w]-wallSize, playerId: data[i].id});
                         playerY = wallArrayY[w]-wallSize;
                         collided = true;
-                    } else if (playerY < wallArrayY[w]+wallSize && playerY > wallArrayY[w]-10) {
+                    } else if (playerY < wallArrayY[w]+wallSize && playerY > wallArrayY[w]-5) {
                         socket.emit("collision", {change: true, PlayerY: wallArrayY[w]+wallSize, playerId: data[i].id});
                         playerY = wallArrayY[w]+wallSize;
                         collided = true;
